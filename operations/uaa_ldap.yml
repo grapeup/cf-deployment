@@ -1,0 +1,22 @@
+---
+# Add UAA integration with Grape Up LDAP
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/ldap?
+  value:
+    add_shadow_user_on_login: true
+    enabled: true
+    mailAttributeName: mail
+    profile_type: search-and-bind
+    searchBase: ou=users,dc=grapeup,dc=com
+    searchFilter: (&(uid={0})(|(memberof=CN=uaa.user,OU=cf-uaa,OU=groups,DC=grapeup,DC=com)(memberof=CN=uaa.admin,OU=cf-uaa,OU=groups,DC=grapeup,DC=com)))
+    groups:
+      groupRoleAttribute: description
+      groupSearchFilter: memberUid={0}
+      profile_type: groups-as-scopes
+      searchBase: ou=cf-uaa,ou=groups,dc=grapeup,dc=com
+    ssl:
+      skipverification: true
+      tls: simple
+    url: ldap://10.10.1.8:389
+    userDN: cn=readonly,dc=grapeup,dc=com
+    userPassword: Prygdur3
