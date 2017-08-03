@@ -1,0 +1,21 @@
+---
+# Add concourse client to UAA
+- type: replace
+  path: /variables/-
+  value:
+    name: uaa_clients_concourse_secret
+    type: password
+
+- type: replace
+  path: /instance_groups/name=uaa/jobs/name=uaa/properties/uaa/clients/concourse?
+  value:
+    secret: "((uaa_clients_concourse_secret))"
+    scope: cloud_controller.read
+    authorities: cloud_controller.admin
+    authorized-grant-types: "authorization_code,client_credentials,refresh_token"
+    access-token-validity: 3600
+    refresh-token-validity: 3600
+    autoapprove: true
+    override: true
+    redirect-uri: https://ci.cflab.grapeup.com/auth/uaa/callback
+
